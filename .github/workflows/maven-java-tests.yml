@@ -45,7 +45,7 @@ jobs:
           # Attempt to download the matching driver, fallback to known version if fails
           wget $EDGE_DRIVER_URL -O edgedriver_linux64.zip || (
             echo "Driver version $EDGE_VERSION not found. Falling back to version 130.x.x.x...";
-            wget https://msedgedriver.azureedge.net/130.0.1617.51/edgedriver_linux64.zip -O edgedriver_linux64.zip
+            wget https://msedgedriver.azureedge.net/ 131.0.2903.112/edgedriver_linux64.zip -O edgedriver_linux64.zip
           )
 
           unzip edgedriver_linux64.zip -d /usr/local/bin/
