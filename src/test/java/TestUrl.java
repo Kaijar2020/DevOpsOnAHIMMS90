@@ -38,7 +38,6 @@ public class TestUrl {
             }
         }
         catch (Exception e){
-            System.out.println("sent email");
             throw new RuntimeException("There is a problem to redirect the website.Please, check the issue on server.");
         }
 

@@ -55,7 +55,7 @@ jobs:
           # Try to download the driver
           wget $EDGE_DRIVER_URL -O edgedriver_linux64.zip || (
             echo "Driver version not found. Falling back to a known working version...";
-            wget https://msedgedriver.azureedge.net/113.0.1774.50/edgedriver_linux64.zip -O edgedriver_linux64.zip
+            wget https://msedgedriver.azureedge.net/131.0.2903.146/edgedriver_linux64.zip -O edgedriver_linux64.zip
           )
           unzip edgedriver_linux64.zip -d /usr/local/bin/
           mv /usr/local/bin/msedgedriver /usr/local/bin/edgedriver
