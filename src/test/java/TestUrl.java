@@ -3,6 +3,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -18,7 +19,9 @@ public class TestUrl {
     public void set_up(){
 
 //        driver = new ChromeDriver();
-        driver = new EdgeDriver();
+        EdgeOptions options = new EdgeOptions();
+        options.setBrowserVersion("104.0.1293.47");  // This runs Edge in headless mode
+        driver = new EdgeDriver(options);
         driver.get("http://ahimms90.com/");
 
         driver.manage().window().maximize();
