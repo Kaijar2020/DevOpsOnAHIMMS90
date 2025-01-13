@@ -31,6 +31,7 @@ jobs:
           sudo apt-get install -y wget unzip
           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get install -f -y
+          google-chrome --version
 
       # Step 4: Install ChromeDriver
       - name: Install ChromeDriver
@@ -39,6 +40,7 @@ jobs:
           CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
           wget https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
           unzip chromedriver_linux64.zip -d /usr/local/bin/
+          chromedriver --version
 
       # Step 5: Cache Maven dependencies
       - name: Cache Maven Dependencies
