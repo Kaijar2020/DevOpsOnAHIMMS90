@@ -18,10 +18,8 @@ public class TestUrl {
     @BeforeClass
     public void set_up(){
 
-//        driver = new ChromeDriver();
-        EdgeOptions options = new EdgeOptions();
-        options.setBrowserVersion("104.0.1293.47");  // This runs Edge in headless mode
-        driver = new EdgeDriver(options);
+        driver = new ChromeDriver();
+//        driver = new EdgeDriver();
         driver.get("http://ahimms90.com/");
 
         driver.manage().window().maximize();
