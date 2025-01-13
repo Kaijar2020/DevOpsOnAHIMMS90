@@ -25,12 +25,9 @@ jobs:
           java-version: '11'
 
       # Step 3: Install Microsoft Edge and EdgeDriver
-      - name: Install Microsoft Edge and EdgeDriver
+      - name: Install Microsoft Edge
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget curl unzip
-
-          # Install Microsoft Edge browser
           sudo apt-get install -y software-properties-common
           wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
           sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
@@ -38,20 +35,38 @@ jobs:
           sudo apt-get install -y microsoft-edge-stable
           microsoft-edge --version
 
-          # Install Edge WebDriver
+      - name: Install EdgeDriver
+        run: |
+          # Get the installed Microsoft Edge version
           EDGE_VERSION=$(microsoft-edge --version | grep -oP '\d+\.\d+\.\d+')
-          EDGE_DRIVER_URL="https://msedgedriver.azureedge.net/ 131.0.2903.112/edgedriver_linux64.zip"
+          echo "Edge version: $EDGE_VERSION"
 
-          # Attempt to download the matching driver, fallback to known version if fails
+          # Construct the EdgeDriver download URL
+          EDGE_DRIVER_URL="https://msedgedriver.azureedge.net/${EDGE_VERSION}/edgedriver_linux64.zip"
+
+          # Try to download the driver
           wget $EDGE_DRIVER_URL -O edgedriver_linux64.zip || (
-            echo "Driver version $EDGE_VERSION not found. Falling back to version 130.x.x.x...";
-            wget https://msedgedriver.azureedge.net/ 131.0.2903.112/edgedriver_linux64.zip -O edgedriver_linux64.zip
+            echo "Driver version $EDGE_VERSION not found. Falling back to the latest available version.";
+
+            # Try to download the latest stable driver
+            LATEST_DRIVER_VERSION=$(curl -s https://msedgedriver.azureedge.net/LATEST_RELEASE)
+            echo "Using latest driver version: $LATEST_DRIVER_VERSION"
+
+            # Construct the URL for the latest version and download
+            EDGE_DRIVER_URL="https://msedgedriver.azureedge.net/$LATEST_DRIVER_VERSION/edgedriver_linux64.zip"
+
+            # If downloading the latest version fails, fall back to an older known version (e.g., v130)
+            wget $EDGE_DRIVER_URL -O edgedriver_linux64.zip || (
+              echo "Latest version failed, trying fallback to version 130.0.1617.51...";
+              EDGE_DRIVER_URL="https://msedgedriver.azureedge.net/130.0.1617.51/edgedriver_linux64.zip"
+              wget $EDGE_DRIVER_URL -O edgedriver_linux64.zip
+            )
           )
 
+          # Unzip the driver and move it to /usr/local/bin
           unzip edgedriver_linux64.zip -d /usr/local/bin/
           mv /usr/local/bin/msedgedriver /usr/local/bin/edgedriver
           edgedriver --version
-
 
       # Step 4: Cache Maven dependencies
       - name: Cache Maven Dependencies
