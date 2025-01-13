@@ -29,21 +29,29 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y wget curl unzip
-          
+
           # Install Microsoft Edge browser
           sudo apt-get install -y software-properties-common
           wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
           sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
           sudo apt-get update
           sudo apt-get install -y microsoft-edge-stable
-          
+          microsoft-edge --version
+
           # Install Edge WebDriver
           EDGE_VERSION=$(microsoft-edge --version | grep -oP '\d+\.\d+\.\d+')
           EDGE_DRIVER_URL="https://msedgedriver.azureedge.net/${EDGE_VERSION}/edgedriver_linux64.zip"
-          wget $EDGE_DRIVER_URL -O edgedriver_linux64.zip
+
+          # Attempt to download the matching driver, fallback to known version if fails
+          wget $EDGE_DRIVER_URL -O edgedriver_linux64.zip || (
+            echo "Driver version $EDGE_VERSION not found. Falling back to version 130.x.x.x...";
+            wget https://msedgedriver.azureedge.net/130.0.1617.51/edgedriver_linux64.zip -O edgedriver_linux64.zip
+          )
+
           unzip edgedriver_linux64.zip -d /usr/local/bin/
           mv /usr/local/bin/msedgedriver /usr/local/bin/edgedriver
           edgedriver --version
+
 
       # Step 4: Cache Maven dependencies
       - name: Cache Maven Dependencies
