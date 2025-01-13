@@ -35,16 +35,31 @@ jobs:
           sudo apt-get install -y microsoft-edge-stable
           microsoft-edge --version
 
-      # Step 4: Install EdgeDriver
+#      # Step 4: Install EdgeDriver
+#      - name: Install EdgeDriver
+#        run: |
+#          EDGE_VERSION=$(microsoft-edge --version | grep -oP '\d+\.\d+\.\d+')
+#          EDGE_DRIVER_URL="https://msedgedriver.azureedge.net/${EDGE_VERSION}/edgedriver_linux64.zip"
+#          wget $EDGE_DRIVER_URL -O edgedriver_linux64.zip
+#          unzip edgedriver_linux64.zip -d /usr/local/bin/
+#          mv /usr/local/bin/msedgedriver /usr/local/bin/edgedriver
+#          edgedriver --version
+
+      # Step: Install EdgeDriver with fallback
       - name: Install EdgeDriver
         run: |
           EDGE_VERSION=$(microsoft-edge --version | grep -oP '\d+\.\d+\.\d+')
+          echo "Edge version: $EDGE_VERSION"
           EDGE_DRIVER_URL="https://msedgedriver.azureedge.net/${EDGE_VERSION}/edgedriver_linux64.zip"
-          wget $EDGE_DRIVER_URL -O edgedriver_linux64.zip
+
+          # Try to download the driver
+          wget $EDGE_DRIVER_URL -O edgedriver_linux64.zip || (
+            echo "Driver version not found. Falling back to a known working version...";
+            wget https://msedgedriver.azureedge.net/113.0.1774.50/edgedriver_linux64.zip -O edgedriver_linux64.zip
+          )
           unzip edgedriver_linux64.zip -d /usr/local/bin/
           mv /usr/local/bin/msedgedriver /usr/local/bin/edgedriver
           edgedriver --version
-
 
       # Step 5: Cache Maven dependencies
       - name: Cache Maven Dependencies
