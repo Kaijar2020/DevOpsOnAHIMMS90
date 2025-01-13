@@ -1,4 +1,4 @@
-name: Deploy and Run Selenium Tests
+name: Deploy and Run Selenium Tests on Edge (Headless Mode)
 
 on:
   push:
@@ -24,21 +24,28 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      # Step 3: Install necessary dependencies (for browsers and drivers)
-      - name: Install Google Chrome and ChromeDriver
+      # Step 3: Install Microsoft Edge and EdgeDriver
+      - name: Install Microsoft Edge and EdgeDriver
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget unzip curl
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get install -f -y
-          google-chrome --version
-          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
-          CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
-          wget https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip -d /usr/local/bin/
-          chromedriver --version
+          sudo apt-get install -y wget curl unzip
+          
+          # Install Microsoft Edge browser
+          sudo apt-get install -y software-properties-common
+          wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
+          sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
+          sudo apt-get update
+          sudo apt-get install -y microsoft-edge-stable
+          
+          # Install Edge WebDriver
+          EDGE_VERSION=$(microsoft-edge --version | grep -oP '\d+\.\d+\.\d+')
+          EDGE_DRIVER_URL="https://msedgedriver.azureedge.net/${EDGE_VERSION}/edgedriver_linux64.zip"
+          wget $EDGE_DRIVER_URL -O edgedriver_linux64.zip
+          unzip edgedriver_linux64.zip -d /usr/local/bin/
+          mv /usr/local/bin/msedgedriver /usr/local/bin/edgedriver
+          edgedriver --version
 
-      # Step 4: Cache Maven dependencies to speed up future builds
+      # Step 4: Cache Maven dependencies
       - name: Cache Maven Dependencies
         uses: actions/cache@v3
         with:
@@ -47,10 +54,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # Step 5: Build and Run the Selenium Tests
-      - name: Build and Run Tests
+      # Step 5: Build and Run the Selenium Tests in Headless Mode
+      - name: Build and Run Tests in Headless Mode
         run: |
           mvn clean install
-          mvn test
-
+          mvn test -Dselenium.headless=true
 
