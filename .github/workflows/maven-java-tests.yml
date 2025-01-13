@@ -40,7 +40,7 @@ jobs:
 
           # Install Edge WebDriver
           EDGE_VERSION=$(microsoft-edge --version | grep -oP '\d+\.\d+\.\d+')
-          EDGE_DRIVER_URL="https://msedgedriver.azureedge.net/${EDGE_VERSION}/edgedriver_linux64.zip"
+          EDGE_DRIVER_URL="https://msedgedriver.azureedge.net/ 131.0.2903.112/edgedriver_linux64.zip"
 
           # Attempt to download the matching driver, fallback to known version if fails
           wget $EDGE_DRIVER_URL -O edgedriver_linux64.zip || (
