@@ -2,6 +2,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -16,8 +17,8 @@ public class TestUrl {
     @BeforeClass
     public void set_up(){
 
-        driver = new ChromeDriver();
-
+//        driver = new ChromeDriver();
+        driver = new EdgeDriver();
         driver.get("http://ahimms90.com/");
 
         driver.manage().window().maximize();

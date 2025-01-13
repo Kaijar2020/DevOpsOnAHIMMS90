@@ -24,23 +24,27 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      # Step 3: Install Chrome Browser (required for Selenium)
-      - name: Install Chrome
+      # Step 3: Install Microsoft Edge Browser (required for Selenium)
+      - name: Install Microsoft Edge
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget unzip
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get install -f -y
-          google-chrome --version
+          sudo apt-get install -y software-properties-common
+          wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
+          sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
+          sudo apt-get update
+          sudo apt-get install -y microsoft-edge-stable
+          microsoft-edge --version
 
-      # Step 4: Install ChromeDriver
-      - name: Install ChromeDriver
+      # Step 4: Install EdgeDriver
+      - name: Install EdgeDriver
         run: |
-          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
-          CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
-          wget https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip -d /usr/local/bin/
-          chromedriver --version
+          EDGE_VERSION=$(microsoft-edge --version | grep -oP '\d+\.\d+\.\d+')
+          EDGE_DRIVER_URL="https://msedgedriver.azureedge.net/${EDGE_VERSION}/edgedriver_linux64.zip"
+          wget $EDGE_DRIVER_URL -O edgedriver_linux64.zip
+          unzip edgedriver_linux64.zip -d /usr/local/bin/
+          mv /usr/local/bin/msedgedriver /usr/local/bin/edgedriver
+          edgedriver --version
+
 
       # Step 5: Cache Maven dependencies
       - name: Cache Maven Dependencies
