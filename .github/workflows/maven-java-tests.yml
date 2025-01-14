@@ -58,7 +58,7 @@ jobs:
             # If downloading the latest version fails, fall back to an older known version (e.g., v130)
             wget $EDGE_DRIVER_URL -O edgedriver_linux64.zip || (
               echo "Latest version failed, trying fallback to version 130.0.1617.51...";
-              EDGE_DRIVER_URL="https://msedgedriver.azureedge.net/130.0.1617.51/edgedriver_linux64.zip"
+              EDGE_DRIVER_URL="https://msedgedriver.azureedge.net/131.0.2903.112/edgedriver_linux64.zip"
               wget $EDGE_DRIVER_URL -O edgedriver_linux64.zip
             )
           )
