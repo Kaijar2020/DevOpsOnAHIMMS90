@@ -49,7 +49,7 @@ jobs:
             echo "Driver version $EDGE_VERSION not found. Falling back to the latest available version.";
 
             # Try to download the latest stable driver
-            LATEST_DRIVER_VERSION=$(curl -s https://msedgedriver.azureedge.net/LATEST_RELEASE)
+            # LATEST_DRIVER_VERSION=$(curl -s https://msedgedriver.azureedge.net/LATEST_RELEASE)
             echo "Using latest driver version: $LATEST_DRIVER_VERSION"
 
             # Construct the URL for the latest version and download
