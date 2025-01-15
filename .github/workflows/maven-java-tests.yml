@@ -26,8 +26,8 @@ jobs:
         run: mvn -B clean test
           
           # Conditional email notification
-      - name: Send email if Cypress fails or skips
-        if: failure() || steps.cypress.outcome == 'failure'
+      - name: Send email if Test fails or skips
+        if: failure() || steps.maven.outcome == 'failure'
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com # Replace with your SMTP server
@@ -37,7 +37,7 @@ jobs:
           subject: "AHIMMS90 Website not found on given URL"
           body: |
             There is a problem in the server.Please fixed it now.${{ github.ref_name }} have failed or been skipped.
-                   
+            This url not work "http://ahimms90.com/".     
             Details:
             - Repository: ${{ github.repository }}
             - Branch: ${{ github.ref_name }}
