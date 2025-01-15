@@ -1,10 +1,9 @@
 name: Selenium with TestNG - CI
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-      branches: [ "main" ]
+  schedule:
+    - cron: '0 */6 * * *'
+
 jobs:
   build:
 
@@ -36,7 +35,7 @@ jobs:
           password: ${{ secrets.SMTP_PASSWORD }} # Use GitHub Secrets for secure credentials
           subject: "AHIMMS90 Website not found on given URL"
           body: |
-            There is a problem in the server.Please fixed it now.${{ github.ref_name }} have failed or been skipped.
+            There is a problem in the server.Please fixed it now.The Test on ${{ github.ref_name }} branch have failed or been skipped.
             This url not work "http://ahimms90.com/".     
             Details:
             - Repository: ${{ github.repository }}
