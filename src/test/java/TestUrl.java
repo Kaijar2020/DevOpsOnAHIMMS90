@@ -18,8 +18,8 @@ public class TestUrl {
     @BeforeClass
     public void set_up(){
 
-//        driver = new ChromeDriver();
-        driver = new EdgeDriver();
+        driver = new ChromeDriver();
+//        driver = new EdgeDriver();
         driver.get("http://ahimms90.com/");
 
         driver.manage().window().maximize();
