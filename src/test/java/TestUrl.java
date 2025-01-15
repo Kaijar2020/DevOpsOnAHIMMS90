@@ -21,7 +21,7 @@ public class TestUrl {
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         driver = new ChromeDriver(options);
-        driver.get("http://ahimms90.com/");
+        driver.get("http://ahimms99.com/");
 
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
