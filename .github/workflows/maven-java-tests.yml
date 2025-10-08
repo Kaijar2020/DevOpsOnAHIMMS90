@@ -1,8 +1,8 @@
-name: Selenium with TestNG - CI
+name: Selenium with TestNG - Monthly CI Pipeline
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 0 15 * *'  # Runs at 00:00 (midnight) on the 15th of every month
 
 jobs:
   build:
